@@ -1,23 +1,11 @@
 import json
 import csv
+from Task import Task
 
-class Task:
-    def __init__(self, id, title, priority, done):
-        self.id = id
-        self.title = title
-        self.priority = priority
-        self.done = done
+import api_client
 
-    def to_dict(self):
-        return {"id": self.id, "title": self.title, "priority": self.priority, "done": self.done}
 
-    def __str__(self):
-        if self.done: done = "✅ Выполнено"
-        else: done = "❌ Не выполнено"
-        text="[%s] %s (Приоритет: %s) - %s\n" % (self.id, self.title, self.priority, done)
-        return text
-
-def create_task(title, priority):
+def create_task(todo_list, title, priority):
     if not todo_list:
         task = Task(1,title,priority,False)
     else:
@@ -82,14 +70,18 @@ def convert_Tasks_in_taskDictList(tasks):
         tasks_dict_list.append(task.to_dict())
     return tasks_dict_list
 
-todo_list=[]
 if __name__ == "__main__":
-    todo_list.append(create_task("Купить хлеб", "Высокий"))
-    todo_list.append(create_task("Сделать ДЗ", "Низкий"))
+    todo_list=[]
+    todo_list.append(create_task(todo_list, "Купить хлеб", "Высокий"))
+    todo_list.append(create_task(todo_list, "Сделать ДЗ", "Низкий"))
     todo_list[1].done = True
     show_tasks(todo_list)
     export_to_csv("report.csv", todo_list)
     save_to_json("tasks.json", todo_list)
+
+    for task in todo_list:
+        api_client.sync_task_to_server(task)
+    print(f"\n💡 Совет дня: {api_client.get_motivation()}")
     
     todo_list.clear() # Очищаем память (имитация перезапуска)
     print("\n--- Перезапуск ---")
