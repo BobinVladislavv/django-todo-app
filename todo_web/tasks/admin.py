@@ -1,3 +1,10 @@
 from django.contrib import admin
+from .models import Task
 
-# Register your models here.
+@admin.register(Task)
+class TaskAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "priority", "done", "synced", "created_at")
+    list_filter = ("done", "priority", "synced")
+    search_fields = ("title",)
+    list_editable = ("done",)
+
