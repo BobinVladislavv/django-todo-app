@@ -12,9 +12,20 @@ def find_max_id(tasks):
             max=task["id"]
     return max
 
-
-
+def show_tasks(tasks):
+    if tasks == None:
+        print("Список задач пуст")
+        return
+    for task in tasks:
+        if task["done"]: done = "✅ Выполнено"
+        else: done = "❌ Не выполнено"
+        print("[%s] %s (Приоритет: %s) - %s" % (task["id"], task["title"], task["priority"], done))
 
 todo_list = []
+add_task("1",1)
+add_task("2",1)
+add_task("2",1)
+add_task("2",1)
+show_tasks(todo_list)
 
 
