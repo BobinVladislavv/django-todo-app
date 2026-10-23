@@ -1,5 +1,5 @@
 def add_task(title, priority):
-    if todo_list == None:
+    if not todo_list:
         task = {"id": 1, "title": title, "priority": priority, "done": False}
     else:
         task = {"id": find_max_id(todo_list)+1, "title": title, "priority": priority, "done": False}
@@ -46,7 +46,7 @@ def load_from_file(filename):
 
 def get_task_from_string(text):
     values=text.split('|')
-    task = {"id": values[0], "title": values[1], "priority": values[2], "done": values[3]=="True"}
+    task = {"id": int(values[0]), "title": values[1], "priority": values[2], "done": values[3]=="True"}
     return task
 
 todo_list=[]
