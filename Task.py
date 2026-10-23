@@ -1,12 +1,13 @@
 class Task:
-    def __init__(self, id, title, priority, done):
+    def __init__(self, id, title, priority, done, synced=False):
         self.id = id
         self.title = title
         self.priority = priority
         self.done = done
+        self.synced = synced
 
     def to_dict(self):
-        return {"id": self.id, "title": self.title, "priority": self.priority, "done": self.done}
+        return {"id": self.id, "title": self.title, "priority": self.priority, "done": self.done, "synced": self.synced}
 
     def __str__(self):
         if self.done: done = "✅ Выполнено"

@@ -9,28 +9,33 @@ def init_db():
         "id INTEGER PRIMARY KEY AUTOINCREMENT," \
         "title TEXT NOT NULL," \
         "priority TEXT," \
-        "done BOOLEAN DEFAULT 0" \
+        "done BOOLEAN DEFAULT 0," \
+        "synced BOOLEAN DEFAULT 0" \
         ");")
         print("База данных инициализирована ✅")
 
 def add_task_to_db(title, priority):
     with sqlite3.connect("todo.db") as conn:
-            cursor = conn.cursor()
-            cursor.execute("INSERT INTO tasks (title, priority, done) VALUES (?, ?, 0)", (title, priority))
-            return cursor.lastrowid
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tasks WHERE title = ? AND priority = ?", (title, priority))
+        if cursor.fetchone() is not None:
+            print(f"Задача «{title}» уже существует, пропускаем.")
+            return None
+        cursor.execute("INSERT INTO tasks (title, priority, done, synced) VALUES (?, ?, 0, 0)", (title, priority))
+        return cursor.lastrowid
 
 def get_all_tasks():
     tasks_list = []
     with sqlite3.connect("todo.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, title, priority, done FROM tasks")
+        cursor.execute("SELECT * FROM tasks")
         rows = cursor.fetchall()
         for row in rows:
-            tasks_list.append(convert_row_in_task(row))
+            tasks_list.append(row_to_task(row))
     return tasks_list
 
-def convert_row_in_task(row):
-    return Task(row[0],row[1],row[2],bool(row[3]))
+def row_to_task(row):
+    return Task(row[0],row[1],row[2],bool(row[3]),bool(row[4]))
 
 def mark_task_done(task_id):
      with sqlite3.connect("todo.db") as conn:
@@ -51,4 +56,21 @@ def find_task_by_id(task_id):
         row = cursor.fetchone()
         if row is None:
             return None
-        return convert_row_in_task(row)
+        return row_to_task(row)
+
+def get_unsynced_tasks():
+    tasks_list=[]
+    with sqlite3.connect("todo.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM tasks WHERE synced = 0")
+        rows = cursor.fetchall()
+        for row in rows:
+            tasks_list.append(row_to_task(row))
+    return tasks_list
+
+def mark_task_synced(task_id):
+    with sqlite3.connect("todo.db") as conn:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE tasks SET synced = 1 WHERE id = ?", (task_id,))
+        return cursor.rowcount > 0
+    

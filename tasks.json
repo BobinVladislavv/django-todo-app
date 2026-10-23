@@ -1,62 +1,16 @@
 [
     {
-        "id": 1,
+        "id": 15,
         "title": "Купить хлеб",
         "priority": "Высокий",
-        "done": true
+        "done": false,
+        "synced": true
     },
     {
-        "id": 2,
+        "id": 16,
         "title": "Сделать ДЗ",
         "priority": "Низкий",
-        "done": false
-    },
-    {
-        "id": 3,
-        "title": "Купить хлеб",
-        "priority": "Высокий",
-        "done": false
-    },
-    {
-        "id": 4,
-        "title": "Сделать ДЗ",
-        "priority": "Низкий",
-        "done": false
-    },
-    {
-        "id": 5,
-        "title": "Купить хлеб",
-        "priority": "Высокий",
-        "done": false
-    },
-    {
-        "id": 6,
-        "title": "Сделать ДЗ",
-        "priority": "Низкий",
-        "done": false
-    },
-    {
-        "id": 7,
-        "title": "Купить хлеб",
-        "priority": "Высокий",
-        "done": false
-    },
-    {
-        "id": 8,
-        "title": "Сделать ДЗ",
-        "priority": "Низкий",
-        "done": false
-    },
-    {
-        "id": 9,
-        "title": "Купить хлеб",
-        "priority": "Высокий",
-        "done": false
-    },
-    {
-        "id": 10,
-        "title": "Сделать ДЗ",
-        "priority": "Низкий",
-        "done": false
+        "done": false,
+        "synced": true
     }
 ]

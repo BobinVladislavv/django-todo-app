@@ -69,12 +69,15 @@ if __name__ == "__main__":
     export_to_csv("report.csv", todo_list)
     save_to_json("tasks.json", todo_list)
 
-    for task in todo_list:
-        api_client.sync_task_to_server(task)
+    unsynced = db.get_unsynced_tasks()
+    
+    for task in unsynced:
+        if api_client.sync_task_to_server(task):
+            db.mark_task_synced(task.id)
     print(f"\n💡 Совет дня: {api_client.get_motivation()}")
     
     todo_list.clear() # Очищаем память (имитация перезапуска)
     print("\n--- Перезапуск ---")
-    todo_list = load_from_json("tasks.json")
+    todo_list = db.get_all_tasks()
     show_tasks(todo_list)
 
