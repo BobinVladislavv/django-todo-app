@@ -35,17 +35,20 @@ def convert_row_in_task(row):
 def mark_task_done(task_id):
      with sqlite3.connect("todo.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("UPDATE tasks SET done = 1 WHERE id = ?", str(task_id))
+        cursor.execute("UPDATE tasks SET done = 1 WHERE id = ?", (task_id,))
         return cursor.rowcount > 0
 
 def delete_task_from_db(task_id):
     with sqlite3.connect("todo.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("DELETE FROM tasks WHERE id = ?", task_id)
-        return cursor.rowcount == 0
+        cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
+        return cursor.rowcount > 0
 
 def find_task_by_id(task_id):
     with sqlite3.connect("todo.db") as conn:
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM tasks WHERE id = ?", task_id)
-        return convert_row_in_task(cursor.fetchone())
+        cursor.execute("SELECT * FROM tasks WHERE id = ?", (task_id,))
+        row = cursor.fetchone()
+        if row is None:
+            return None
+        return convert_row_in_task(row)

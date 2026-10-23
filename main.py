@@ -6,20 +6,6 @@ import api_client
 import db
 
 
-def create_task(todo_list, title, priority):
-    if not todo_list:
-        task = Task(1,title,priority,False)
-    else:
-        task = Task(find_max_id(todo_list)+1,title,priority,False)
-    return task
-
-def find_max_id(tasks):
-    max=0
-    for task in tasks:
-        if(task.id>max):
-            max=task.id
-    return max
-
 def get_tasks_as_string(tasks):
     text=""
     if not tasks:
