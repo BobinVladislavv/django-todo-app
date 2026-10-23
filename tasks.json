@@ -1,0 +1,14 @@
+[
+    {
+        "id": 1,
+        "title": "Купить хлеб",
+        "priority": "Высокий",
+        "done": false
+    },
+    {
+        "id": 2,
+        "title": "Сделать ДЗ",
+        "priority": "Низкий",
+        "done": true
+    }
+]
