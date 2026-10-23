@@ -3,6 +3,7 @@ import csv
 from Task import Task
 
 import api_client
+import db
 
 
 def create_task(todo_list, title, priority):
@@ -71,10 +72,13 @@ def convert_Tasks_in_taskDictList(tasks):
     return tasks_dict_list
 
 if __name__ == "__main__":
-    todo_list=[]
-    todo_list.append(create_task(todo_list, "Купить хлеб", "Высокий"))
-    todo_list.append(create_task(todo_list, "Сделать ДЗ", "Низкий"))
-    todo_list[1].done = True
+    db.init_db()
+    db.add_task_to_db("Купить хлеб", "Высокий")
+    db.add_task_to_db("Сделать ДЗ", "Низкий")
+    todo_list=db.get_all_tasks()
+    show_tasks(todo_list)
+    db.mark_task_done(1)
+    todo_list=db.get_all_tasks()
     show_tasks(todo_list)
     export_to_csv("report.csv", todo_list)
     save_to_json("tasks.json", todo_list)

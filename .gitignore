@@ -1,0 +1,5 @@
+venv/
+todo.db
+tasks.json
+report.csv
+__pycache__/
