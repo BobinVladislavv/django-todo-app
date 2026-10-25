@@ -27,5 +27,5 @@ class Task(models.Model):
 
     class Meta:
         verbose_name="Задача"
-        verbose_name_plural = "Задача"
+        verbose_name_plural = "Задачи"
         ordering = ["-created_at"]

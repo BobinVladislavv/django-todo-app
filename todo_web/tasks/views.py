@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from .models import Task
 import api_client
 
@@ -39,22 +39,22 @@ def delete_task(request, task_id):
 @login_required
 def sync_tasks(request):
     if request.method == "POST":
-        unsunced = Task.objects.filter(user=request.user, synced=False)
-        total = unsunced.count()
+        unsynced = Task.objects.filter(user=request.user, synced=False)
+        total = unsynced.count()
         if total ==0:
             messages.info(request, "Все задачи синхронизированны")
             return redirect("task_list")
         
-        succes_count = 0
-        for task in unsunced:
+        success_count = 0
+        for task in unsynced:
             if api_client.sync_task_to_server(task):
                 task.synced = True
                 task.save()
-                succes_count+=1
-        if succes_count == total:
-            messages.success(request, f"Синхронизированно {succes_count} задач!")
-        elif succes_count > 0:
-            messages.warning(request, f"Синхронизированно {succes_count} из {total} задач")
+                success_count+=1
+        if success_count == total:
+            messages.success(request, f"Синхронизированно {success_count} задач!")
+        elif success_count > 0:
+            messages.warning(request, f"Синхронизированно {success_count} из {total} задач")
         else:
             messages.error(request, "Не удалось синхронизировать задачи")
     return redirect("task_list")
@@ -80,3 +80,15 @@ def logout_view(request):
         logout(request)
         messages.info(request, "Вы вышли из системы!")
     return redirect("login")
+
+def register_view(request):
+    if request.method == "POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request,user)
+            messages.success(request, f"Аккаунт создан. Добро пожаловать, {user.username}!")
+            return redirect("task_list")
+    else:
+        form = UserCreationForm()
+    return render(request, "tasks/register.html", {"form": form})
