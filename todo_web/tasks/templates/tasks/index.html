@@ -1,13 +1,14 @@
 {% extends "tasks/base.html" %}
+{% block header_title %}📋 Мои задачи{% endblock %}
 
 {% block title %}Список задач{% endblock%}
 
 {% block content %}
     <h1>📋 Мои задачи</h1>
 
-    <form action="{% url 'sync_tasks' %}" method="POST" style="margin-bottom: 15px;">
+    <form action="{% url 'sync_tasks' %}" method="POST">
         {% csrf_token %}
-        <button type = "submit">🔄 Синхронизировать с сервером</button>
+        <button type="submit" class="btn-sync">🔄 Синхронизировать с сервером</button>
     </form>
 
     <form class="add-form" action="{% url 'add_task' %}" method="POST">

@@ -9,21 +9,24 @@
 </head>
 <body>
     <header>
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
-        <h1>📋 Мой To-Do</h1>
-        {% if user.is_authenticated %}
-            <div style="display: flex; align-items: center; gap: 15px;">
-                <span>👤 {{ user.username }}</span>
-                <form action="{% url 'logout' %}" method="POST" style="display:inline;">
-                    {% csrf_token %}
-                    <button type="submit" style="background: transparent; border: 1px solid white; padding: 6px 12px; color: white; cursor: pointer; border-radius: 4px;">
-                        Выйти
-                    </button>
-                </form>
-            </div>
-        {% endif %}
-    </div>
-</header>
+        <div class="header-inner">
+            <h1>
+                <a href="{% url 'task_list' %}" style="color: white; text-decoration: none;">
+                    {% block header_title %}📋 To-Do App{% endblock %}
+                </a>
+            </h1>
+            {% if user.is_authenticated %}
+                <div class="user-info">
+                    <div class="avatar">{{ user.username|first|upper }}</div>
+                    <span>{{ user.username }}</span>
+                    <form action="{% url 'logout' %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn-logout">Выйти</button>
+                    </form>
+                </div>
+            {% endif %}
+        </div>
+    </header>
 
     <main>
         {% if messages %}
@@ -34,7 +37,9 @@
             </ul>
         {% endif %}
 
-        {% block content %}{% endblock %}
+        <div class="card">
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
     
