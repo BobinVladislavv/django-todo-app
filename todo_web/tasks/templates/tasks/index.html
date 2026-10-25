@@ -1,15 +1,18 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>To-Do App</title>
-</head>
-<body>
+{% extends "tasks/base.html" %}
+
+{% block title %}Список задач{% endblock%}
+
+{% block content %}
     <h1>📋 Мои задачи</h1>
 
-    <form action="{% url 'add_task' %}" method="POST">
+    <form action="{% url 'sync_tasks' %}" method="POST" style="margin-bottom: 15px;">
         {% csrf_token %}
-        <input type="text" name="title" placeholder="Название задачи" required>
+        <button type = "submit">🔄 Синхронизировать с сервером</button>
+    </form>
+
+    <form class="add-form" action="{% url 'add_task' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Что нужно сделать?" required>
         <select name="priority">
             <option value="Высокий">Высокий</option>
             <option value="Средний" selected>Средний</option>
@@ -18,36 +21,38 @@
         <button type="submit">Добавить</button>
     </form>
 
-    <hr>
-
     {% if tasks %}
-        <ul>
+        <ul class="task-list">
             {% for task in tasks %}
-                <li>
-                    <strong>{{ task.title }}</strong>
-                    (Приоритет: {{ task.priority }})
-                    {% if task.done %}
-                        <span style="color: green;">✅ Выполнено</span>
+                <li class="task-item {% if task.done %}done{% endif %}">
+                    <span class="task-title">{{ task.title }}</span>
+                    
+                    {% if task.priority == "Высокий" %}
+                        <span class = "badge high">Высокий</span>
+                    {% elif task.priority == "Средний" %}
+                        <span class = "badge medium">Средний</span>
                     {% else %}  
-                        <span style="color: red;">❌ Не выполнено</span>
+                        <span class = "badge low">Низкий</span>
                     {% endif %}
 
+                    <div class = "task-actions">
                     {% if not task.done %}
                         <form action="{% url 'complete_task' task.id %}" method="POST" style="display:inline;">
                             {% csrf_token %}
-                            <button type="submit">✅ Отметить выполненной</button>
+                            <button type="submit">✅</button>
                         </form>
                     {% endif %}
 
                     <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
                         {% csrf_token %}
-                        <button tupe="submit">🗑️ Удалить</button>
+                        <button tupe="submit">🗑️</button>
                     </form>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>Список задач пуст.</p>
-    {% endif %}
-</body>
-</html>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>Список задач пуст.</p>
+{% endif %}
+
+{% endblock%}
