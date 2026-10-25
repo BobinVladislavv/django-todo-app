@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .models import Task
 
 def task_list(request):
@@ -12,4 +12,15 @@ def add_task(request):
         if title:
             Task.objects.create(title=title, priority=priority)
         return redirect("task_list")
-    return redirect("Task_list")
+    return redirect("task_list")
+
+def complete_task(request, task_id):
+    task = get_object_or_404(Task, id = task_id)
+    task.done = True
+    task.save()
+    return redirect("task_list")
+
+def delete_task(request, task_id):
+    task = get_object_or_404(Task, id=task_id)
+    task.delete()
+    return redirect("task_list")

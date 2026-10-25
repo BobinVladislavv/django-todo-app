@@ -28,9 +28,21 @@
                     (Приоритет: {{ task.priority }})
                     {% if task.done %}
                         <span style="color: green;">✅ Выполнено</span>
-                    {% else %}
+                    {% else %}  
                         <span style="color: red;">❌ Не выполнено</span>
                     {% endif %}
+
+                    {% if not task.done %}
+                        <form action="{% url 'complete_task' task.id %}" method="POST" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit">✅ Отметить выполненной</button>
+                        </form>
+                    {% endif %}
+
+                    <form action="{% url 'delete_task' task.id %}" method="POST" style="display:inline;">
+                        {% csrf_token %}
+                        <button tupe="submit">🗑️ Удалить</button>
+                    </form>
                 </li>
             {% endfor %}
         </ul>
