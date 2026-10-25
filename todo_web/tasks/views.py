@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from .models import Task
 import api_client
 
+@login_required
 def task_list(request):
     tasks = Task.objects.all()
     return render(request, "tasks/index.html", {"tasks": tasks})
