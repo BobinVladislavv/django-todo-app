@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>To-Do App</title>
+</head>
+<body>
+    <h1>📋 Мои задачи</h1>
+
+    <form action="{% url 'add_task' %}" method="POST">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Название задачи" required>
+        <select name="priority">
+            <option value="Высокий">Высокий</option>
+            <option value="Средний" selected>Средний</option>
+            <option value="Низкий">Низкий</option>
+        </select>
+        <button type="submit">Добавить</button>
+    </form>
+
+    <hr>
+
+    {% if tasks %}
+        <ul>
+            {% for task in tasks %}
+                <li>
+                    <strong>{{ task.title }}</strong>
+                    (Приоритет: {{ task.priority }})
+                    {% if task.done %}
+                        <span style="color: green;">✅ Выполнено</span>
+                    {% else %}
+                        <span style="color: red;">❌ Не выполнено</span>
+                    {% endif %}
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Список задач пуст.</p>
+    {% endif %}
+</body>
+</html>
