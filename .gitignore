@@ -1,5 +1,17 @@
-venv/
-todo.db
-tasks.json
-report.csv
+# Python
 __pycache__/
+*.py[cod]
+
+# Виртуальное окружение
+venv/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+*.log
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
